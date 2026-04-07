@@ -1,15 +1,223 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GO OUTSIDE</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Faction Screen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #F5F0E8;
+            --text-primary: #1A1A1A;
+            --accent: #F96302;
+            --recede: #A8A8A0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-weight: 500;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Simulating the "warm industrial loft" lighting subtly */
+            background-image: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        /* * LAYOUT 
+         * CSS Grid, four faction cards in a single row 
+         */
+        .faction-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            width: 100%;
+            max-width: 1600px;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .faction-card {
+            background-color: transparent;
+            border: 2px solid var(--text-primary);
+            padding: 32px 24px;
+            position: relative;
+            cursor: pointer;
+            box-sizing: border-box;
+            
+            /* CSS Grid stacking trick allows faces to overlap without absolute positioning collapsing the height */
+            display: grid;
+            grid-template-areas: "card-content";
+            
+            /* At rest / transitions */
+            transition: all 1000ms ease;
+        }
+
+        /* * HOVER BEHAVIOR
+         */
+        
+        /* 1. Unselected cards fade to 40% opacity and shift to concrete grey */
+        .faction-grid:hover .faction-card:not(:hover) {
+            opacity: 0.4;
+            border-color: var(--recede);
+            color: var(--recede);
+        }
+
+        /* 2. Hovered card expands, activates accent color */
+        .faction-card:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+            background-color: #FCF9F5; /* Slight illumination on hover to pop off the floor */
+            box-shadow: 0 16px 32px rgba(0,0,0,0.06);
+        }
+
+        /* 3. Crossfade transitions for faces */
+        .face {
+            grid-area: card-content;
+            display: flex;
+            flex-direction: column;
+            transition: opacity 1000ms ease;
+        }
+
+        .hover-face {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .faction-card:hover .front-face {
+            opacity: 0;
+        }
+
+        .faction-card:hover .hover-face {
+            opacity: 1;
+        }
+
+        /* * TYPOGRAPHY 
+         */
+        p, h2, div {
+            margin: 0;
+        }
+
+        .lead-up {
+            font-size: 32px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+
+        .body-copy {
+            font-size: 18px;
+            line-height: 1.45;
+            /* Flex layout pushes the footer elements to the bottom naturally */
+            margin-bottom: 40px; 
+        }
+
+        .faction-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            letter-spacing: 0.05em;
+        }
+
+        .tool-name {
+            font-size: 22px;
+            margin-top: auto;
+            margin-bottom: 8px;
+            line-height: 1.2;
+            color: var(--accent); /* Applying accent to the payoff */
+        }
+
+        .ticket-number {
+            font-size: 13px;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        /* Responsive scaling for smaller screens (maintaining the row structure as long as feasible) */
+        @media (max-width: 1200px) {
+            .lead-up { font-size: 26px; }
+            .body-copy { font-size: 16px; }
+            .tool-name { font-size: 18px; }
+        }
+        
+        @media (max-width: 900px) {
+            .faction-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .faction-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="faction-grid">
+
+        <div class="faction-card">
+            <div class="face front-face">
+                <h2 class="lead-up">YOU KNOW THIS FEELING.</h2>
+                <p class="body-copy">Someone filled out the form. Tuesday, 2pm. You were on a job. Wednesday you meant to call. Thursday it slipped. Friday they signed with someone else.<br><br>The lead didn't go cold. It went to a competitor.</p>
+            </div>
+            <div class="face hover-face">
+                <div class="faction-label">LEAD FOLLOW-UP</div>
+                <p class="body-copy">The form was filled out. Tuesday, 2pm. You were on a job. By 2:01 they had a response. By Wednesday you had a conversation scheduled. Friday you closed it.<br><br>The lead didn't wait. Neither did you.</p>
+                <div class="tool-name">Automated Lead Follow-Up System</div>
+                <div class="ticket-number">TICKET #001</div>
+            </div>
+        </div>
+
+        <div class="faction-card">
+            <div class="face front-face">
+                <h2 class="lead-up">YOU KNOW THIS FEELING.</h2>
+                <p class="body-copy">3:47pm. Phone buzzes on the passenger seat. Both hands in the crawlspace. It rings out. No voicemail left. No text. By 4:15 they've already booked someone else.</p>
+            </div>
+            <div class="face hover-face">
+                <div class="faction-label">MISSED CALL TEXT-BACK</div>
+                <p class="body-copy">3:47pm. Phone buzzes on the passenger seat. Both hands in the crawlspace. It rings out. By 3:48 they received a text: "Hey, sorry I missed you — I'm with a customer. Can I call you back at 5?" They replied: "Perfect."</p>
+                <div class="tool-name">Missed Call Text-Back Automation</div>
+                <div class="ticket-number">TICKET #002</div>
+            </div>
+        </div>
+
+        <div class="faction-card">
+            <div class="face front-face">
+                <h2 class="lead-up">YOU KNOW THIS FEELING.</h2>
+                <p class="body-copy">Tuesday 10am. You moved a job to hold that slot. You're there. The chair is empty. You wait eight minutes before you know. That hour is gone. They'll reschedule — they always say they'll reschedule.</p>
+            </div>
+            <div class="face hover-face">
+                <div class="faction-label">APPOINTMENT REMINDERS</div>
+                <p class="body-copy">Tuesday 10am. You're there. So are they. They got a reminder Sunday. Another Monday evening. A confirmation Tuesday morning. The chair is full. The hour is yours.</p>
+                <div class="tool-name">Automated Appointment Reminder Sequence</div>
+                <div class="ticket-number">TICKET #003</div>
+            </div>
+        </div>
+
+        <div class="faction-card">
+            <div class="face front-face">
+                <h2 class="lead-up">YOU KNOW THIS FEELING.</h2>
+                <p class="body-copy">Handshake at the door. "Great work, seriously." They mean it. You drive away. A week passes. Your Google profile says 4.1 stars. Last review: fourteen months ago. The next customer searches, sees that number, keeps scrolling.</p>
+            </div>
+            <div class="face hover-face">
+                <div class="faction-label">REVIEW REQUEST</div>
+                <p class="body-copy">Handshake at the door. "Great work, seriously." They mean it. You drive away. Twenty minutes later they receive a text: "Glad we could help — if you have a moment, a quick review means the world to us." They tap. They post. 4.7 stars. Last review: today.</p>
+                <div class="tool-name">Automated Review Request System</div>
+                <div class="ticket-number">TICKET #004</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
 </html>
